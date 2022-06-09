@@ -26,16 +26,28 @@
 
 			async function checkForNewEtag() {
 				const response = await fetch('https://extra-life.org/api/participants/' + extraLifeParticipantID);
+				const data = await response.json();
 				console.debug("Checking for new etag...");
 				for (var pair of response.headers.entries()) {
 					if (pair[0] === 'etag') {
 						if (pair[1] !== latestParticipantEtag) {
-							console.debug("New etag.");
+							console.debug("New etag, getting sumDonations (total raised)...");
+							getSumDonations(data);
 						}
 						latestParticipantEtag = pair[1];
 					}
 				}
   			}
+
+			function getSumDonations(data) {
+				let sumDonations = data.sumDonations;
+				const totalRaised = document.getElementById('total-raised');
+				if (typeof sumDonations !== 'number') {
+					console.info('sumDonations (total raised) is: ' + sumDonations);
+					totalRaised.innerHTML = '$' + sumDonations.toLocaleString('en-US');
+				}
+			}
+
 			console.info('ToonFest For Charity Donation Alerts Version 1.0');
 			console.info('Extra Life Participant ID: ' + extraLifeParticipantID);
 			console.info('Check for New Etag Interval (in seconds): ' + checkIntervalInSeconds);
