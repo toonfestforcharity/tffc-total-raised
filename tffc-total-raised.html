@@ -41,7 +41,7 @@
 			function getSumDonations(data) {
 				let sumDonations = data.sumDonations;
 				const totalRaised = document.getElementById('total-raised');
-				if (typeof sumDonations !== 'number') {
+				if (typeof sumDonations === 'number') {
 					console.info('sumDonations (total raised) is: ' + sumDonations);
 					totalRaised.innerHTML = '$' + sumDonations.toLocaleString('en-US');
 				}
